@@ -35,12 +35,10 @@ First, on our .NET API project we create an endpoint which receives an instance 
   [HttpPost(Name = "getGridData")]
   public async Task<IActionResult> GetGridData([FromBody] QueryMaker query)
   {
-    // first, we make the queries using QueryMaker...
-    QueryMakerResult<T> result = _dbContext.SomeEntity.MakeQueryResult(queryMaker);
+    // first, we make the queries using QueryMaker to get the data asynchronously
+    QueryMakerData<T> data = await _dbContext.SomeEntity.MakeQueryResult(queryMaker).GetDataAsync();
 
-    // ... then, we can use the GetDataAsync() extension method to get the data asynchronously
-    QueryMakerData<T> data = await result.GetDataAsync();
-
+    // then, we return the resulting Items and TotalAmmount
     return Ok(new
     {
       data.Items,
@@ -61,7 +59,7 @@ Now, on our Blazor project we can use the `QueryMakerGrid` component to consume 
   @* we instantiate our QueryMakerGrid component with its columns and DataProvider *@
   <QueryMakerGrid DataProvider="@(async request => await GetData(request))" PaginationState="@PaginationState">
     <QueryMakerGridColumn Virtualize="true" Sortable="true" Title="Name" Property="@(x => x.Name)" />
-    <QueryMakerGridColumn SearchWhileTyping="false" Title="Status" Property=@(x => x.Status) />
+    <QueryMakerGridColumn SearchWhileTyping="false" Title="Status" Property="@(x => x.Status)" />
   </QueryMakerGrid>
 
   @* to add pagination we need to use the QueryMakerGridPaginator component *@
