@@ -1,0 +1,26 @@
+@using QueryMakerLibrary.Grid.Contexts
+
+@typeparam TProp
+
+<div class="query-maker-column-options-row">
+	<input checked=@IsChecked()
+	@onclick=@(() => AddCustomFilterAndReloadGrid())
+	type="checkbox" />
+		<span style="font-size: 14px">@(" " + (Item is null ? "{Null}" : Item))</span>
+	<br />
+</div>
+
+@code
+{
+	[Parameter, EditorRequired]
+	public TProp Item { get; set; } = default!;
+
+	[Parameter, EditorRequired]
+	public QueryMakerColumnOptionsContext<TProp> QueryMakerColumnOptionsContext { get; set; } = default!;
+
+	private bool IsChecked()
+		=> QueryMakerColumnOptionsContext.IsChecked(Item);
+
+	private void AddCustomFilterAndReloadGrid()
+		=> QueryMakerColumnOptionsContext.AddCustomFilterAndReloadGrid(Item);
+}

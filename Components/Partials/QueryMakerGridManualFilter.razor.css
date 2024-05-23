@@ -1,0 +1,80 @@
+.querymakergrid-manualfilter-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  grid-auto-rows: 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "selectarea selectarea selectarea selectarea selectarea selectarea selectarea selectarea buttonarea buttonarea"
+    "valuearea valuearea valuearea valuearea valuearea valuearea valuearea valuearea buttonarea buttonarea";
+}
+
+.querymakergrid-manualfilter-selectarea {
+  grid-area: selectarea;
+  
+}
+
+.querymakergrid-manualfilter-valuearea {
+  grid-area: valuearea;
+}
+
+.querymakergrid-manualfilter-buttonarea {
+  grid-area: buttonarea;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.querymakergrid-manualfilter-inputs-base {
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: gray;
+  width: 100%;
+}
+
+.querymakergrid-manualfilter-inputs-base:focus {
+  border-color: blue;
+}
+
+.querymakergrid-manualfilter-inputs-select {
+  background: transparent;
+  cursor: pointer;
+}
+
+.querymakergrid-manualfilter-inputs-button {
+  width: 55%;
+  height: 50%;
+  border: none;
+  border-radius: 5px;
+  background-color: white;
+  background-size: 75% 75%;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 5px;
+}
+
+.querymakergrid-manualfilter-inputs-button-add {
+  background-image: url("https://i.imgur.com/Iy6kk4v.png");
+}
+
+.querymakergrid-manualfilter-inputs-button-add:hover {
+  background-color: #cbffbb;
+}
+
+.querymakergrid-manualfilter-inputs-button-add:active {
+  background-color: #46b248;
+}
+
+.querymakergrid-manualfilter-inputs-button-remove {
+  background-image: url("https://i.imgur.com/cKJcBOe.png");
+}
+
+.querymakergrid-manualfilter-inputs-button-remove:hover {
+  background-color: #ffcaca;
+}
+
+.querymakergrid-manualfilter-inputs-button-remove:active {
+  background-color: #ba2828;
+}

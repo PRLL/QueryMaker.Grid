@@ -1,0 +1,10 @@
+.querymakergrid-searchinput {
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: gray;
+  width: 100%;
+}
+
+.querymakergrid-searchinput:focus {
+  border-color: blue;
+}

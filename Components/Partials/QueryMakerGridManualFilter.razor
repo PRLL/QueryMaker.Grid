@@ -1,0 +1,50 @@
+@using static QueryMakerLibrary.Components.Filter
+@using QueryMakerLibrary.Grid.Extensions
+@using QueryMakerLibrary.Grid.Common
+
+<div class="querymakergrid-manualfilter-container">
+	<div class="querymakergrid-manualfilter-selectarea">
+		<select class="querymakergrid-manualfilter-inputs-base querymakergrid-manualfilter-inputs-select" @bind=@ManualCustomFilter.Action>
+			@foreach (FilterActions filterAction
+				in CustomFilterOptions.FilterActionValues)
+			{
+				<option value=@filterAction>@filterAction.GetName()</option>
+			}
+		</select>
+	</div>
+
+	<div class="querymakergrid-manualfilter-valuearea">
+		<input autofocus type="search"
+		placeholder=@(IsNew ? "Enter the value" : "{Blank}")
+		class="querymakergrid-manualfilter-inputs-base"
+		@bind=@ManualCustomFilter.Value @bind:event="oninput" />
+	</div>
+
+	<div class="querymakergrid-manualfilter-buttonarea">
+		<button type="button" class=@("querymakergrid-manualfilter-inputs-button "
+			+ (IsNew
+				? "querymakergrid-manualfilter-inputs-button-add"
+				: "querymakergrid-manualfilter-inputs-button-remove"))
+		@onclick=@OnButtonClickInvoke />
+	</div>
+</div>
+
+@code
+{
+	[Parameter, EditorRequired]
+	public required Type UnderlyingType { get; set; }
+
+	[Parameter, EditorRequired]
+	public required bool IsNew { get; set; }
+
+	[Parameter, EditorRequired]
+	public required ManualCustomFilter ManualCustomFilter { get; set; }
+
+	[Parameter, EditorRequired]
+	public required EventCallback<ManualCustomFilter> OnButtonClick { get; set; }
+
+	private async Task OnButtonClickInvoke()
+	{
+		await OnButtonClick.InvokeAsync();
+	}
+}

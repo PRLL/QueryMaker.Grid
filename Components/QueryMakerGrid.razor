@@ -1,0 +1,11 @@
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using QueryMakerLibrary.Grid.Common
+@using QueryMakerLibrary.Grid.Contexts
+
+@typeparam TGridItem
+
+@inherits QuickGrid<TGridItem>
+
+<CascadingValue TValue="QueryMakerGridContext<TGridItem>" IsFixed="true" Value="@_queryMakerGridContext">
+	@RenderBase()
+</CascadingValue>

@@ -1,0 +1,29 @@
+@using QueryMakerLibrary.Grid.Common
+@using QueryMakerLibrary.Grid.Extensions
+
+<input autofocus type="search" placeholder=@PlaceHolder class="querymakergrid-searchinput"
+@bind=@SearchTerm @bind:event="oninput" @bind:after=@FilterOptions @onkeydown=@FilterOptionsOnEnter />
+
+@code
+{
+	[Parameter, EditorRequired]
+	public required bool SearchWhileTyping { get; set; }
+
+	[Parameter, EditorRequired]
+	public required string SearchTerm { get; set; }
+
+	[Parameter, EditorRequired]
+	public required string PlaceHolder { get; set; }
+
+	[Parameter, EditorRequired]
+	public required EventCallback<Callbacks.FilterOptions> FilterOptionsCallback { get; set; }
+
+	private async Task FilterOptions()
+		=> await FilterOptionsCallbackInvoke(SearchWhileTyping);
+
+	private async Task FilterOptionsOnEnter(KeyboardEventArgs keyboardEventArgs)
+		=> await FilterOptionsCallbackInvoke(keyboardEventArgs.PressedEnter());
+
+	private async Task FilterOptionsCallbackInvoke(bool search)
+		=> await FilterOptionsCallback.InvokeAsync(new(SearchTerm, search));
+}

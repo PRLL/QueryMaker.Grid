@@ -1,0 +1,22 @@
+@using Microsoft.AspNetCore.Components.QuickGrid
+
+@typeparam TGridItem
+@typeparam TProp
+
+@inherits PropertyColumn<TGridItem, TProp>
+
+@{
+	if (RenderQueryMakerGridColumnOptions && ColumnOptions is null)
+	{
+		ColumnOptions =
+			@<QueryMakerColumnOptions
+			TGridItem="TGridItem" TProp="TProp"
+			Virtualize=@Virtualize SearchWhileTyping=@SearchWhileTyping
+			PropertyName=@PropertyName
+			Title=@(Title is null ? PropertyName : Title)
+			VirtualizeLoadDelay=@(VirtualizeLoadDelay < 0 ? 0 : VirtualizeLoadDelay)
+			VirtualizeItemsPerPage=@(VirtualizeItemsPerPage < 0 ? 0 : VirtualizeItemsPerPage) />;
+	}
+
+	base.BuildRenderTree(__builder);
+}

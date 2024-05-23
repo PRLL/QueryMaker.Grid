@@ -1,0 +1,114 @@
+@using QueryMakerLibrary
+@using static QueryMakerLibrary.Components.Filter
+@using QueryMakerLibrary.Grid.Common
+@using QueryMakerLibrary.Grid.Providers
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using QueryMakerLibrary.Grid.Components
+@using QueryMakerLibrary.Grid.Extensions
+@using QueryMakerLibrary.Grid.Components.Partials
+
+@typeparam TGridItem
+@typeparam TProp
+
+<div class="querymakergrid-columnoptions-header-container">
+	<div class="querymakergrid-columnoptions-header-content-area">
+		@if (AddFilterManually)
+		{
+			<b>Manual Filters</b>
+		}
+		else
+		{
+			<QueryMakerGridSearchInput SearchWhileTyping=@SearchWhileTyping
+			SearchTerm=@SearchTerm PlaceHolder=@PlaceHolder
+			FilterOptionsCallback=@((x) => FilterOptions(x.SearchTerm, x.Search)) />
+		}
+	</div>
+	<div class="querymakergrid-columnoptions-header-switch-area">
+		@if (AddFilterManually)
+		{
+			<button class="querymakergrid-columnoptions-header-switch-base querymakergrid-columnoptions-header-switch-left"
+			@onclick=@SwitchFiltersType />
+		}
+		else
+		{
+			<button class="querymakergrid-columnoptions-header-switch-base querymakergrid-columnoptions-header-switch-right"
+			@onclick=@SwitchFiltersType />
+		}
+	</div>
+</div>
+
+<hr />
+
+<div class="querymakergrid-columnoptions-body-container">
+	@if (AddFilterManually)
+	{
+		foreach (ManualCustomFilter manualCustomFilter
+			in ManualCustomFilters)
+		{
+			<QueryMakerGridManualFilter UnderlyingType=@UnderlyingType
+			IsNew=false ManualCustomFilter=@manualCustomFilter
+			OnButtonClick=@(() => DeleteManualCustomFilter(manualCustomFilter.Id)) />
+
+			<hr />
+		}
+
+		<QueryMakerGridManualFilter UnderlyingType=@UnderlyingType
+		IsNew=true ManualCustomFilter=@NewManualCustomFilter
+		OnButtonClick=@AddNewManualCustomFilter />
+	}
+	else
+	{
+		@if (Virtualize)
+		{
+			<Virtualize @ref=@VirtualizeInstance Context="item" ItemsProvider=@LoadVirtualizedOptions OverscanCount=@VirtualizeItemsPerPage>
+				<ItemContent>
+					<QueryMakerColumnOptionsRow
+						Item=@item
+						QueryMakerColumnOptionsContext=@QueryMakerColumnOptionsContext />
+				</ItemContent>
+				<Placeholder>
+					<div style="height: 25px;white-space: nowrap">
+						<input checked=@(false) type="checkbox" />@(" ...")
+						<br />
+					</div>
+				</Placeholder>
+			</Virtualize>
+		}
+		else
+		{
+			@if (IsLoading)
+			{
+				<div style="margin-left: 90px;">
+					<QueryMakerGridLoadingSpinner />
+				</div>
+			}
+			else
+			{
+				foreach (TProp item in VirtualizeState.Items)
+				{
+					<QueryMakerColumnOptionsRow
+						Item=@item
+						QueryMakerColumnOptionsContext=@QueryMakerColumnOptionsContext />
+				}
+			}
+		}
+	}
+</div>
+
+<hr />
+
+<div class="querymakergrid-columnoptions-footer-container">
+	<div class="querymakergrid-columnoptions-footer-empty-area"></div>
+	<div class="querymakergrid-columnoptions-footer-filter-area">
+		<button @onclick=@SetSelectedValuesAndReloadGrid
+		class="querymakergrid-columnoptions-footer-buttons-base querymakergrid-columnoptions-footer-buttons-filter">
+			<b>Filter</b>
+		</button>
+	</div>
+	<div class="querymakergrid-columnoptions-footer-clear-area">
+		<button @onclick=@ClearFilters
+		class="querymakergrid-columnoptions-footer-buttons-base querymakergrid-columnoptions-footer-buttons-clear">
+			<b>Clear</b>
+		</button>
+	</div>
+</div>
